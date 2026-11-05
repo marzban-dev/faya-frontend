@@ -1,0 +1,94 @@
+/* Inter, subset to Latin; the variable file covers every weight. */
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("/fonts/Inter/inter-variable.woff2") format("woff2");
+}
+
+/* Geist Mono, subset to Latin; used for code and for the small label text. */
+@font-face {
+    font-family: "Geist Mono";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("/fonts/GeistMono/geist-mono-variable.woff2") format("woff2");
+}
+
+/* YekanBakh ships no Medium file, so weight 500 (font-medium) would fall back to regular
+   and look thin. Serve the semi-bold file for it until a real Medium is added. */
+@font-face {
+    font-family: "YekanBakh";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url("/fonts/YekanBakh/yekanbakh-semi-bold.woff2") format("woff2");
+}
+
+/* Persian has no good monospace face, so labels fall back to the app font there. */
+html[lang^="fa"],
+html[lang^="ar"] {
+    --app-font: var(--font-yekanbakh);
+    --app-label-font: var(--font-yekanbakh);
+}
+
+html[lang^="en"] {
+    --app-font: var(--font-latin);
+    --app-label-font: var(--font-mono);
+}
+
+:root {
+    --app-font: var(--font-latin);
+    --app-label-font: var(--font-mono);
+
+    scroll-behavior: smooth;
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        bottom: 0;
+        background: transparent;
+        color: transparent;
+        cursor: pointer;
+        height: auto;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: auto;
+    }
+}
+
+@theme {
+    /* FONT SIZE */
+    --text-3xs: 0.5rem;
+    --text-2xs: 0.625rem;
+
+    /* FONT WEIGHT */
+    --font-weight-extrablack: 950;
+    --font-weight-heavy: 1000;
+
+    /* FONT FAMILY */
+    --font-yekanbakh: "YekanBakh", sans-serif;
+    --font-latin: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+
+    --font-sans: var(--app-font);
+    --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    --font-label: var(--app-label-font);
+
+    /* BREAKPOINTS */
+    --breakpoint-2xs: 400px;
+    --breakpoint-xs: 480px;
+    --breakpoint-3xl: 1700px;
+
+    /* FONT FEATURE SETTING */
+    --font-feature-ss01: "ss01";
+    --font-feature-ss02: "ss02";
+    --font-feature-ss03: "ss03";
+    --font-feature-ss04: "ss04";
+    --font-feature-ss05: "ss05";
+    --font-feature-ss06: "ss06";
+    --font-feature-ss07: "ss07";
+    --font-feature-ss08: "ss08";
+    --font-feature-ss09: "ss09";
+    --font-feature-ss10: "ss10";
+}

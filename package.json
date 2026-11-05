@@ -1,0 +1,45 @@
+{
+    "name": "faya-frontend",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "start": "node .output/server/index.mjs",
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "typecheck": "vue-tsc --noEmit -p .nuxt/tsconfig.app.json",
+        "pwa-assets": "bun layers/pwa-layer/scripts/generate-assets.ts",
+        "intro-assets": "bun apps/landing/scripts/intro-assets/build.ts"
+    },
+    "dependencies": {
+        "@iconify-json/lucide": "^1.2.147",
+        "@nuxt/fonts": "^1.1.0",
+        "@nuxt/ui": "^4.12.0",
+        "@nuxtjs/i18n": "^10.6.0",
+        "@tanstack/vue-query": "^5.105.0",
+        "@vite-pwa/nuxt": "^1.1.1",
+        "@vueuse/core": "^15.0.0",
+        "@vueuse/integrations": "^15.0.0",
+        "axios": "^1.21.0",
+        "jwt-decode": "^4.0.0",
+        "lenis": "^1.3.27",
+        "nuxt": "^4.6.2",
+        "vue": "3.5.44",
+        "vue-router": "5.4.0",
+        "workbox-core": "^7.4.1",
+        "workbox-precaching": "^7.4.1"
+    },
+    "overrides": {
+        "vue": "3.5.44"
+    },
+    "devDependencies": {
+        "@nuxt/devtools-kit": "^3.4.4",
+        "@types/node": "^26.6.5",
+        "@vite-pwa/assets-generator": "^2.0.0",
+        "tailwindcss": "^4.3.3",
+        "typescript": "~6.0.3",
+        "vue-tsc": "^3.3.13"
+    }
+}

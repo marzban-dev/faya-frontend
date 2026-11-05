@@ -1,0 +1,72 @@
+{
+    "common": {
+        "api_errors": {
+            "bad_request": "The request isn't valid",
+            "permission_denied": "You don't have permission to do this",
+            "not_found": "Not found",
+            "conflict": "This conflicts with existing data",
+            "too_large": "The request is too large",
+            "too_many_requests": "Too many requests. Try again in a moment.",
+            "request_failed": "The request failed",
+            "unexpected": "Something went wrong. Try again."
+        }
+    },
+    "pwa": {
+        "install": {
+            "title": "Install Faya",
+            "description": "Open it like an app and get notifications.",
+            "manual": "Tap Share, then Add to Home Screen, to get notifications on this device.",
+            "submit": "Install"
+        },
+        "push": {
+            "title": "Notifications on this device",
+            "on": "On",
+            "enable": "Turn on",
+            "disable": "Turn off",
+            "test": "Send a test",
+            "enabled": "Notifications are on for this device",
+            "disabled": "Notifications are off for this device",
+            "test_sent": {
+                "title": "Test sent",
+                "description": "It should arrive in a few seconds."
+            },
+            "status": {
+                "checking": "Checking…",
+                "on": "On for this device.",
+                "off": "Get Faya notifications on this device.",
+                "blocked": "Blocked. Allow notifications for this site in your browser settings.",
+                "blocked_ios": "Blocked. Turn them on in Settings → Notifications → Faya.",
+                "needs_install": "On iPhone and iPad, notifications work in the Home Screen app.",
+                "not_configured": "Notifications aren't available yet.",
+                "unsupported": "This browser can't show notifications from the app."
+            },
+            "install_steps": {
+                "share": "In Safari, tap Share",
+                "add": "Choose Add to Home Screen.",
+                "open": "Open Faya from your Home Screen and turn notifications on here."
+            },
+            "errors": {
+                "needs_install": "Add Faya to your Home Screen first, then open it from there.",
+                "unsupported": "This browser can't show notifications from the app.",
+                "blocked": "Notifications are blocked. Allow them in your browser or phone settings.",
+                "not_enabled": "Notifications were not turned on.",
+                "not_configured": "Notifications aren't available yet.",
+                "test_failed": "The test notification could not be sent.",
+                "loading": "The app is still loading. Try again in a moment.",
+                "incomplete_subscription": "The browser returned an incomplete subscription. Try again."
+            }
+        }
+    },
+    "landing": {
+        "title": "Faya",
+        "intro": {
+            "label": "Introduction",
+            "loading": "Loading…",
+            "progress": "Getting ready… {percent}",
+            "scroll_hint": {
+                "mouse": "Scroll to step inside",
+                "touch": "Swipe up to step inside"
+            }
+        }
+    }
+}

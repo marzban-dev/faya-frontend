@@ -1,0 +1,3 @@
+[install]
+# New package versions wait 7 days after release before they can be installed.
+minimumReleaseAge = 604800

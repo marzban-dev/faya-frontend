@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+/* Custom tailwind utilities */
+@import "./utils.css";
+
+/* Global tailwind configs */
+@import "./global-configs.css";
+
+/* Selected Theme tailwind config file */
+@import "./theme.css";
+
+@source "../../../..";

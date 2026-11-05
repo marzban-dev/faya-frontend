@@ -1,0 +1,93 @@
+:root {
+    /* NUXT UI BORDER RADIUS */
+    --ui-radius: 0.5rem;
+
+    --ui-header-height: 4.5rem;
+}
+
+/* Custom palettes for Nuxt UI (see app/app.config.ts). */
+@theme static {
+    /* The brand orange, the default primary colour. */
+    --color-brand-50: #fff6ed;
+    --color-brand-100: #ffead4;
+    --color-brand-200: #ffd0a8;
+    --color-brand-300: #ffae70;
+    --color-brand-400: #ff8a3d;
+    --color-brand-500: #ff6b0a;
+    --color-brand-600: #f05200;
+    --color-brand-700: #c73d02;
+    --color-brand-800: #9e320b;
+    --color-brand-900: #7f2b0c;
+    --color-brand-950: #451204;
+
+    /* A true grey with no tint, the default neutral: near-black surfaces in dark mode. */
+    --color-graphite-50: #f7f7f7;
+    --color-graphite-100: #efefef;
+    --color-graphite-200: #e2e2e2;
+    --color-graphite-300: #c8c8c8;
+    --color-graphite-400: #9a9a9a;
+    --color-graphite-500: #6f6f6f;
+    --color-graphite-600: #4e4e4e;
+    --color-graphite-700: #333333;
+    --color-graphite-800: #262626;
+    --color-graphite-900: #191919;
+    --color-graphite-950: #111111;
+
+    /* A blue-tinted grey, the default neutral: the navy look in dark mode. */
+    --color-navy-50: #f5f7fb;
+    --color-navy-100: #e8edf6;
+    --color-navy-200: #cfd8e8;
+    --color-navy-300: #a8b6cf;
+    --color-navy-400: #7b8cad;
+    --color-navy-500: #56688c;
+    --color-navy-600: #3d4e70;
+    --color-navy-700: #273859;
+    --color-navy-800: #17284a;
+    --color-navy-900: #0c1a33;
+    --color-navy-950: #060f22;
+}
+
+@theme {
+    /* NUXT UI PRIMARY COLORS */
+    --color-primary: var(--ui-color-primary-500);
+    --color-primary-50: var(--ui-color-primary-50);
+    --color-primary-100: var(--ui-color-primary-100);
+    --color-primary-200: var(--ui-color-primary-200);
+    --color-primary-300: var(--ui-color-primary-300);
+    --color-primary-400: var(--ui-color-primary-400);
+    --color-primary-500: var(--ui-color-primary-500);
+    --color-primary-600: var(--ui-color-primary-600);
+    --color-primary-700: var(--ui-color-primary-700);
+    --color-primary-800: var(--ui-color-primary-800);
+    --color-primary-900: var(--ui-color-primary-900);
+    --color-primary-950: var(--ui-color-primary-950);
+
+    /* NUXT UI SECONDARY COLORS */
+    --color-secondary: var(--ui-color-secondary-500);
+    --color-secondary-50: var(--ui-color-secondary-50);
+    --color-secondary-100: var(--ui-color-secondary-100);
+    --color-secondary-200: var(--ui-color-secondary-200);
+    --color-secondary-300: var(--ui-color-secondary-300);
+    --color-secondary-400: var(--ui-color-secondary-400);
+    --color-secondary-500: var(--ui-color-secondary-500);
+    --color-secondary-600: var(--ui-color-secondary-600);
+    --color-secondary-700: var(--ui-color-secondary-700);
+    --color-secondary-800: var(--ui-color-secondary-800);
+    --color-secondary-900: var(--ui-color-secondary-900);
+    --color-secondary-950: var(--ui-color-secondary-950);
+
+    /* NUXT UI NEUTRAL COLORS */
+    --color-neutral: var(--ui-color-neutral-500);
+    --color-neutral-50: var(--ui-color-neutral-50);
+    --color-neutral-100: var(--ui-color-neutral-100);
+    --color-neutral-200: var(--ui-color-neutral-200);
+    --color-neutral-300: var(--ui-color-neutral-300);
+    --color-neutral-400: var(--ui-color-neutral-400);
+    --color-neutral-500: var(--ui-color-neutral-500);
+    --color-neutral-600: var(--ui-color-neutral-600);
+    --color-neutral-700: var(--ui-color-neutral-700);
+    --color-neutral-800: var(--ui-color-neutral-800);
+    --color-neutral-900: var(--ui-color-neutral-900);
+    --color-neutral-950: var(--ui-color-neutral-950);
+
+}
