@@ -56,5 +56,6 @@ const { ready, progress, played } = useIntroStage({ section, stage, logo, logoSh
    the first paint; useIntroStage sets the same position once the app runs. */
 .intro-hint {
     top: calc(46cqh + var(--intro-logo-width) * 660 / 1280 * (0.95 - 0.5));
+    padding-top: clamp(2rem, 6cqh, 4rem);
 }
 </style>
