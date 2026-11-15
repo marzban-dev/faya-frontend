@@ -51,12 +51,12 @@ const circleIn = (rect: IntroRect, scale: number, pupil: IntroPupil): IntroCircl
     radius: pupil.radius * scale,
 });
 
-// The logo sits a little above centre to leave room for the scroll hint, as wide as the
-// screen allows (its frame has generous margins, so it may overflow a narrow screen).
+// The logo sits a little above centre to leave room for the scroll hint, at a modest size
+// (must match --intro-logo-width in Intro.vue).
 // The intro covers the screen like `object-fit: cover`.
 export const layoutIntro = (width: number, height: number, frames: IntroFrames): IntroLayout => {
     const logoAspect = INTRO_LOGO.height / INTRO_LOGO.width;
-    const logoWidth = Math.min(width * 1.15, 1100, (height * 0.6) / logoAspect);
+    const logoWidth = Math.min(width * 0.8, 600, (height * 0.34) / logoAspect);
     const logoHeight = logoWidth * logoAspect;
     const logo = {
         x: (width - logoWidth) / 2,

@@ -16,6 +16,8 @@ useHead(() => ({
         <NuxtLayout>
             <VitePwaManifest />
             <NuxtPage />
+            <CommonFilmGrain />
+            <CommonCustomCursor />
             <div dir="ltr">
                 <VueQueryDevtools dir="ltr" button-position="bottom-left" />
             </div>

@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     i18n: {
         strategy: "no_prefix",
         detectBrowserLanguage: false,
-        defaultLocale: "fa_ir",
+        defaultLocale: "en",
         locales: [
             {
                 name: "Farsi",

@@ -46,8 +46,9 @@ export default defineNuxtConfig({
         injectManifest: {
             globPatterns: ["**/*.{js,css,html,png,svg,ico,json,webp,woff2}"],
             // iOS reads its splash screen once, at launch; precaching all 80 would cost every
-            // visitor about 3 MB. The landing intro's frames are ~15 MB and load on demand.
-            globIgnores: ["**/icons/apple-splash-*", "**/intro/**"],
+            // visitor about 3 MB. The landing intro's frames are ~15 MB and the sample works and
+            // category videos are several MB more; they load on demand.
+            globIgnores: ["**/icons/apple-splash-*", "**/intro/**", "**/samples/**"],
         },
 
         devOptions: {

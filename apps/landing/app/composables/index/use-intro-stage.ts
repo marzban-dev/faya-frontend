@@ -10,11 +10,9 @@ type IntroElements = {
     logoShade: Ref<HTMLElement | null>;
     introCanvas: Ref<HTMLCanvasElement | null>;
     hint: Ref<HTMLElement | null>;
+    tunnel: Ref<{ setProgress: (progress: number) => void } | null>;
 };
 
-// Share of the section's scroll distance spent zooming into the logo (1.6 of 6.6 screens);
-// the rest plays the intro.
-const ZOOM_SHARE = 1.6 / 6.6;
 const MAX_PIXEL_RATIO = 2;
 // Loading fills the progress up to this share (IntroLoadingProgress.vue's CSS uses it too); the rest fills over the logo's last cycle,
 // so it reaches 100% when the logo holds and scrolling unlocks, not seconds before.
@@ -22,9 +20,10 @@ const LOADING_SHARE = 0.9;
 const PROGRESS_EASE_RATE = 8;
 
 // Drives the landing intro: the logo loops while the page loads, then scroll zooms into its
-// eye and scrubs through the intro frames. Everything is drawn from the scroll position on
-// each animation frame, so scrolling back up plays it in reverse.
-export const useIntroStage = (elements: IntroElements) => {
+// eye, scrubs through the intro frames and flies through the tunnel. Everything is drawn
+// from the scroll position on each animation frame, so scrolling back up plays it in
+// reverse — until the tunnel's end, where `onArrive` hands over to the hub once.
+export const useIntroStage = (elements: IntroElements, onArrive: () => void) => {
     // states
 
     const ready = ref(false);
@@ -38,8 +37,8 @@ export const useIntroStage = (elements: IntroElements) => {
     let introContext: CanvasRenderingContext2D | null = null;
     let pixelRatio = 1;
     let sectionTop = 0;
-    let zoomDistance = 1;
-    let introDistance = 1;
+    let distance = 1;
+    let arrived = false;
     let scrollY = 0;
     let dirty = true;
     let drawnVersion = -1;
@@ -89,9 +88,7 @@ export const useIntroStage = (elements: IntroElements) => {
         }
 
         sectionTop = section.getBoundingClientRect().top + window.scrollY;
-        const distance = Math.max(1, section.offsetHeight - height);
-        zoomDistance = distance * ZOOM_SHARE;
-        introDistance = distance - zoomDistance;
+        distance = Math.max(1, section.offsetHeight - height);
 
         const hint = elements.hint.value;
         if (hint) hint.style.top = `${layout.logo.y + layout.logo.height * INTRO_LOGO.contentBottom}px`;
@@ -184,10 +181,15 @@ export const useIntroStage = (elements: IntroElements) => {
         dirty = false;
         drawnVersion = version;
 
-        const progress = scrollY - sectionTop;
-        const zoom = zoomAt(layout, progress / zoomDistance);
+        const timeline = introTimelineAt(scrollY - sectionTop, distance);
+        const zoom = zoomAt(layout, timeline.zoom);
         drawLogo(layout, zoom);
-        drawIntro(layout, zoom, (progress - zoomDistance) / introDistance);
+        drawIntro(layout, zoom, timeline.frames);
+        elements.tunnel.value?.setProgress(Math.min(1, Math.max(0, timeline.tunnel)));
+        if (!arrived && timeline.tunnel >= INTRO_ARRIVE_AT) {
+            arrived = true;
+            onArrive();
+        }
 
         const hint = elements.hint.value;
         if (hint) hint.style.opacity = `${hintOpacityAt(zoom)}`;

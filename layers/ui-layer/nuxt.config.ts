@@ -21,7 +21,8 @@ export default defineNuxtConfig({
         families: [
             { name: "YekanBakh", provider: "local", weights: [100, 300, 400, 600, 700, 800, 900] },
             // Declared in assets/css/global-configs.css: a variable font the local provider can't describe.
-            { name: "Inter", provider: "none" },
+            { name: "Geist", provider: "none" },
+            { name: "Instrument Serif", provider: "none" },
             { name: "Geist Mono", provider: "none" },
             { name: "Segoe UI", provider: "none" },
             { name: "Helvetica Neue", provider: "none" },

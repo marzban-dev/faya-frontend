@@ -1,5 +1,11 @@
 # CLAUDE.md
 
+## Project docs
+
+Product decisions, the site flow, design direction and open questions live in
+[docs/](docs/README.md). Read `docs/README.md` before starting work, and update the docs
+(especially `docs/decisions.md`) whenever a decision is made or changed.
+
 ## Before editing
 
 Ask any questions you need answered before starting. Before editing any file, describe
@@ -237,8 +243,10 @@ validation messages, and page titles.
   `text-start`) instead of `ml-*`, `mr-*`, `left-*`, `text-left`. Use `rtl:`/`ltr:` for
   anything that has to flip, such as directional icons.
 
-The default locale is `fa_ir`. The Farsi text was written in the register above and is
-reviewed by a native speaker; flag wording you're unsure of in the reply.
+The default locale is `en` while the site is built English-first (decided 2026-11-14).
+Until the Farsi pass, new keys get their English text in `fa.json` too. The existing Farsi
+text was written in the register above and is reviewed by a native speaker; flag wording
+you're unsure of in the reply.
 
 ## Layers
 

@@ -67,6 +67,41 @@
                 "mouse": "برای ورود، اسکرول کنید",
                 "touch": "برای ورود، صفحه را به بالا بکشید"
             }
+        },
+        "hub": {
+            "label": "Choose a field",
+            "hint": "Choose a field to step into",
+            "enter": "Enter",
+            "categories": {
+                "film": {
+                    "name": "Film",
+                    "summary": "Film production & distribution"
+                },
+                "design": {
+                    "name": "Design",
+                    "summary": "Visual & brand design"
+                },
+                "commercial": {
+                    "name": "Commercial",
+                    "summary": "Commercial image-making"
+                },
+                "lab": {
+                    "name": "Lab",
+                    "summary": "Research & experimentation"
+                }
+            }
+        }
+    },
+    "shell": {
+        "header": {
+            "label": "Main",
+            "home": "Faya home",
+            "nav": {
+                "gallery": "Gallery",
+                "about": "About",
+                "contact": "Contact",
+                "pricing": "Pricing"
+            }
         }
     }
 }
