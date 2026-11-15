@@ -43,11 +43,11 @@ const fly = async (flight: CategoryMorph) => {
     await nextTick();
     const element = box.value;
     const picture = image.value;
-    const target = flight.direction === "open" ? firstSlideTarget() : await hubTarget(flight.id);
+    const target = await hubTarget(flight.id);
     if (morph.value !== flight) return;
     if (element && picture && target) {
         const options: KeyframeAnimationOptions = {
-            duration: flight.direction === "open" ? MORPH_OPEN_MS : MORPH_CLOSE_MS,
+            duration: MORPH_CLOSE_MS,
             easing: MORPH_EASING,
             fill: "forwards",
         };

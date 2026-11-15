@@ -1,8 +1,9 @@
 <template>
-    <!-- Shared by the hub and the field pages, so a frame morphing between them stays on screen
-         while the page changes underneath it. -->
+    <!-- Shared by the hub and the field pages, so the blink and a frame morphing back to the hub
+         stay on screen while the page changes underneath them. -->
     <div>
         <slot />
         <LandingCategoryMorphLayer />
+        <LandingBlinkLayer />
     </div>
 </template>

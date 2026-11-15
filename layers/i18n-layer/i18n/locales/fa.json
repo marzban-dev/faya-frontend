@@ -94,6 +94,11 @@
         "category": {
             "close": "Close",
             "back": "Back to all fields",
+            "all_fields": "All fields",
+            "next": "Next",
+            "frame": {
+                "clock": "TEH {time}"
+            },
             "steps_label": "Steps of work",
             "step_count": "{current} / {total}",
             "start": "Start a project",
@@ -239,6 +244,7 @@
     "shell": {
         "header": {
             "label": "Main",
+            "trail": "You are here",
             "home": "Faya home",
             "nav": {
                 "gallery": "Gallery",

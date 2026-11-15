@@ -3,9 +3,16 @@
 
 import { useSlideStrip } from "../../composables/category-detail/use-slide-strip";
 
-const props = defineProps<{ category: HubCategory; opening: boolean }>();
+const props = defineProps<{
+    category: HubCategory;
+    // While the eye blinks into the page, paging waits.
+    paused: boolean;
+}>();
 
 const emit = defineEmits<{ exit: [] }>();
+
+// The current step, for the header's trail.
+const step = defineModel<number>("step", { required: true });
 
 // states
 
@@ -18,7 +25,7 @@ const progress = computed(() => railView.value?.fill() ?? null);
 const finaleView = ref<{ root: () => HTMLElement | null } | null>(null);
 const finale = computed(() => finaleView.value?.root() ?? null);
 const steps = categorySteps(props.category);
-const enabled = computed(() => !props.opening);
+const enabled = computed(() => !props.paused);
 const { active, wipe } = useSlideStrip({ slides, finale, progress, enabled, onExitTop: () => emit("exit") });
 
 // methods
@@ -38,43 +45,48 @@ const currentSlide = () => {
 };
 
 defineExpose({ currentSlide });
+
+// watches
+
+watch(active, (value) => {
+    step.value = value;
+});
 </script>
 
 <template>
     <div class="deck">
         <LandingCategoryDetailSlide
-            v-for="(step, slideIndex) in steps"
-            :key="step.id"
+            v-for="(entry, slideIndex) in steps"
+            :key="entry.id"
             :ref="(view) => setSlide(slideIndex, view)"
             :category="category.id"
-            :step="step"
+            :step="entry"
             :index="slideIndex"
             :total="steps.length"
-            :active="!opening && slideIndex === active"
-            :hidden="opening && slideIndex === 0"
+            :active="slideIndex === active"
             :class="{ 'slide-pinned': slideIndex === steps.length - 1 }"
         />
         <!-- Spare scroll after the last slide, over which the finale's stripes close. -->
         <div class="h-lvh" aria-hidden="true" />
         <LandingCategoryDetailFinale ref="finaleView" :category="category.id" :ready="wipe > 0.9" />
+        <LandingCategoryDetailCinemaFrame :step="Math.min(active, steps.length - 1)" :total="steps.length" :counting="wipe < 0.2" />
         <LandingCategoryDetailStepRail
             ref="railView"
             class="transition-opacity duration-700"
-            :class="opening || wipe > 0.2 ? 'pointer-events-none opacity-0' : 'opacity-100'"
-            :total="steps.length"
-            :active="Math.min(active, steps.length - 1)"
+            :class="wipe > 0.2 ? 'opacity-0' : 'opacity-100'"
         />
     </div>
 </template>
 
 <style scoped>
-/* The slides' frame: must match SLIDE_FRAME in utils/category-morph.util.ts, which the hub's
-   frame grows into before this page exists. */
+/* The slides' frame, between the widescreen bars (CinemaFrame): the top bar holds the header,
+   the bottom one the viewfinder's labels. The next slide's top edge peeks above the bottom bar. */
 .deck {
     --card-top: 4.25rem;
+    --bar-bottom: 2rem;
     --card-inset: 0.5rem;
     --card-gap: 0.875rem;
-    --peek: 2.75rem;
+    --peek: calc(2.75rem + var(--bar-bottom));
     --card-radius: 1rem;
     padding-top: var(--card-top);
 }
@@ -88,8 +100,9 @@ defineExpose({ currentSlide });
 @media (min-width: 768px) {
     .deck {
         --card-top: 5rem;
+        --bar-bottom: 2.25rem;
         --card-inset: 1.25rem;
-        --peek: 3rem;
+        --peek: calc(3rem + var(--bar-bottom));
         --card-radius: 1.5rem;
     }
 }

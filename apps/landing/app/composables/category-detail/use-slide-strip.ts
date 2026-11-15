@@ -7,7 +7,7 @@ type StripOptions = {
     finale: Readonly<Ref<HTMLElement | null>>;
     // A line scaled from 0 (first slide) to 1 (last slide) along its height.
     progress: Readonly<Ref<HTMLElement | null>>;
-    // Off while the hub frame is still growing into the first slide (the page doesn't page).
+    // Off while the eye blinks into the page (the page doesn't page).
     enabled: Readonly<Ref<boolean>>;
     // Paging up from the first slide: the field closes and the hub returns.
     onExitTop: () => void;
@@ -331,7 +331,9 @@ export const useSlideStrip = (options: StripOptions) => {
     onMounted(() => {
         reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
         document.documentElement.style.overflow = "hidden";
-        stop = nearestStop(stops(), window.scrollY);
+        // A field always opens on its first slide, also when the previous field was further down.
+        stop = 0;
+        place(0);
         window.addEventListener("scroll", onScroll, { passive: true });
         window.addEventListener("resize", onResize);
         window.addEventListener("wheel", onWheel, { passive: false });

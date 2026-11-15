@@ -8,8 +8,6 @@ const props = defineProps<{
     total: number;
     // The slide in view: its video plays.
     active: boolean;
-    // While the hub frame grows into this slide, it waits underneath.
-    hidden?: boolean;
 }>();
 
 // states
@@ -59,7 +57,7 @@ onMounted(() => sync(props.active));
 
 <template>
     <article ref="root" class="slide" :aria-label="$t(`${textKey}.title`)">
-        <div class="slide-body bg-neutral-900" :class="{ 'opacity-0': hidden }">
+        <div class="slide-body bg-neutral-900">
             <div ref="media" class="slide-media">
                 <video
                     v-if="step.media.kind === 'video'"

@@ -4,6 +4,23 @@ Newest first. Each entry: date, decision, and why if it isn't obvious.
 
 ## 2026-11-15
 
+- **Opening a field: the eye blinks (replaces the hub frame growing into the first slide).**
+  Faya's logo is an eye, so clicking a field closes two almond-edged black lids (about 0.4 s,
+  critically damped), the field loads behind them and its first video gets ready (at most
+  0.7 s), then the eye opens on it (about 0.8 s). Paging waits while the lids move. Going back
+  to the hub keeps the slide shrinking into its hub frame. No blink under reduced motion.
+- **Field pages are framed like a camera's viewfinder:**
+  - **widescreen bars**: a solid black bar behind the header and a thin one at the bottom (the
+    next slide still peeks above it); slides are cut cleanly by the bars as they page. This
+    **replaces the frosted header** on these pages;
+  - **viewfinder corners**: thin marks at the screen's four corners; bottom left the studio's
+    local time (`TEH 14:32`, Tehran), bottom right the step (`02 / 05`). The right edge keeps
+    only its thin fill line (the numbers moved to the corner);
+  - **a breadcrumb** in the header, `← ALL FIELDS / FILM / PRE-PRODUCTION`, the step updating as
+    you page (the root says "All fields", not "Faya", so it reads as the way back). The field
+    shows from tablet width, the step from laptop width; phones keep just the arrow;
+  - **next field at the end**: under "Let's work together", `NEXT · DESIGN →` with that field's
+    still; the eye blinks into it (Film → Design → Commercial → Lab → Film).
 - **Field pages page slide by slide (reverses "scrolls freely" below).** One wheel gesture,
   swipe or arrow/Page key moves exactly one stop (each slide, then the finale fully closed); a
   hand-written **heavy, critically damped spring** (stiffness 70, no bounce or overshoot, about
@@ -12,9 +29,9 @@ Newest first. Each entry: date, decision, and why if it isn't obvious.
   pages (Lenis isn't used there any more); reduced motion jumps straight to the slide. The team
   had rejected one-slide-per-gesture paging earlier; asked for again with a spring.
 - **The round × on the field pages is gone:** visitors didn't understand it. In its place, a
-  labelled **"← Back to all fields"** link next to the logo in the header (on phones just the arrow, placed before
+  labelled **"← Back to all fields"** link *(now the breadcrumb's first part, see above)* next to the logo in the header (on phones just the arrow, placed before
   the logo: the header has no room for the words, and next to "Gallery" it read as part of it).
-- **The header frosts on the field pages** (backdrop blur under a black gradient, 55% at the top fading to nothing; the blur fades with it, so no hard edge) once the
+- *(Later replaced by the widescreen bars, see above.)* **The header frosts on the field pages** (backdrop blur under a black gradient, 55% at the top fading to nothing; the blur fades with it, so no hard edge) once the
   page has moved off the first slide, so slides passing under it don't fight the links.
 - **Field pages kept light (performance pass):** scroll effects write transforms straight onto
   the few moving elements (only when a value changes, on their own GPU layers), never CSS

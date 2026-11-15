@@ -3,6 +3,8 @@
 
 definePageMeta({
     layout: "landing",
+    // A fresh page per field, so going from one field to the next starts it from the top.
+    key: (route) => route.path,
     validate: (route) => {
         const category = route.params.category;
         return typeof category === "string" && ["film", "design", "commercial", "lab"].includes(category);
@@ -19,8 +21,10 @@ const category = HUB_CATEGORIES.find((entry) => entry.id === route.params.catego
 if (!category) throw createError({ statusCode: 404, fatal: true });
 const id = category.id;
 const morph = useCategoryMorph();
+const { blink } = useBlink();
 const deck = ref<DeckView | null>(null);
-const scrolled = ref(false);
+const step = ref(0);
+const steps = categorySteps(category);
 let reducedMotion = false;
 
 useHead(() => ({ title: t(`landing.hub.categories.${id}.name`) }));
@@ -28,16 +32,15 @@ useSeoMeta({ description: () => t(`landing.hub.categories.${id}.summary`) });
 
 // computed
 
-// The hub frame is still growing into the first slide (CategoryMorphLayer); the slide waits.
-const opening = computed(() => morph.value?.direction === "open" && morph.value.id === id && morph.value.stage === "flying");
+const trail = computed(() => {
+    const current = steps[step.value];
+    const field = t(`landing.hub.categories.${id}.name`);
+    return current ? [field, t(`landing.category.steps.${id}.${current.id}.title`)] : [field];
+});
 
 // methods
 
 const exit = () => navigateTo("/");
-
-const onScroll = () => {
-    scrolled.value = window.scrollY > 1;
-};
 
 // lifecycle
 
@@ -50,7 +53,6 @@ onBeforeRouteLeave((to) => {
     if (!slide || !body) return;
     morph.value = {
         id,
-        direction: "close",
         rect: rectOf(body),
         src: slide.poster,
         look: {
@@ -65,24 +67,15 @@ onBeforeRouteLeave((to) => {
 
 onMounted(() => {
     reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
 });
-
-onBeforeUnmount(() => window.removeEventListener("scroll", onScroll));
 </script>
 
 <template>
     <!-- Dark in both modes on purpose: the field opens out of the hub's night sky. -->
-    <main class="min-h-lvh bg-black text-neutral-100">
+    <main class="min-h-lvh bg-black text-neutral-100" :data-field="id">
         <h1 class="sr-only">{{ $t(`landing.hub.categories.${id}.name`) }}</h1>
-        <ShellSiteHeader
-            class="transition-opacity duration-500"
-            :class="opening ? 'opacity-0' : 'opacity-100'"
-            :blurred="scrolled"
-            :back="{ to: '/', label: $t('landing.category.back') }"
-        />
+        <ShellSiteHeader :back="{ to: '/', label: $t('landing.category.back'), short: $t('landing.category.all_fields') }" :trail="trail" />
 
-        <LandingCategoryDetailDeck ref="deck" :category="category" :opening="opening" @exit="exit" />
+        <LandingCategoryDetailDeck ref="deck" v-model:step="step" :category="category" :paused="blink !== null" @exit="exit" />
     </main>
 </template>

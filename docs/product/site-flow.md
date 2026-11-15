@@ -28,16 +28,20 @@ intro plays again next time. After that, the site opens directly on the hub.
 
 ## 3. Category page
 
-- After the morph: the steps of doing that kind of work, revealed with scroll, like
+- The eye blinks into the field (black lids close over the hub and open on the field's first
+  slide). Then the steps of doing that kind of work, revealed with scroll, like
   `steps-of-work.mov`: one full slide per step (for now the field's 5 services) on a strip
   that pages slide by slide (one wheel flick, swipe or arrow key = one slide, carried by a
   spring); the slide in view becomes current and its text animates in. Paging up from the first
-  slide returns to the hub, and so does the **"← Back to all fields"** link next to the logo.
-  The header frosts (blur under a top-to-bottom black gradient) once the page has moved. ✅ (placeholder copy and
-  sample footage)
+  slide returns to the hub, and so does the breadcrumb's **"← All fields"** next to the logo
+  (`← ALL FIELDS / FILM / PRE-PRODUCTION`). The page is framed like a viewfinder: widescreen
+  bars top and bottom, corner marks, Tehran's local time and the step number. ✅ (placeholder
+  copy and sample footage)
 - Ends with black stripes closing like blinds, then a **"Let's work together" CTA button**
   that opens **Contact** with the field (`/contact?field=film`). ✅
-- A shared link opens the page directly, without the morph. Closing it then goes to `/`,
+- Under it, **"Next · Design →"** blinks into the next field (Film → Design → Commercial → Lab →
+  Film), so visitors can move through all four without going back to the hub. ✅
+- A shared link opens the page directly, without the blink. Closing it then goes to `/`,
   which plays the intro if the visitor hasn't seen it.
 
 ## 4. Request flow ⏸

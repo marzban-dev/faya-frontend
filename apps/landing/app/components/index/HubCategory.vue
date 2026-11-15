@@ -9,6 +9,8 @@ const props = defineProps<{
     // the arrival (it would restart, blurred, once the frame shows).
     returning?: boolean;
     skipArrival?: boolean;
+    // Clicked: it keeps its hover look while the eye closes over it, wherever the pointer goes.
+    chosen?: boolean;
 }>();
 
 const emit = defineEmits<{ activate: []; deactivate: []; open: [] }>();
@@ -48,8 +50,8 @@ const onFocus = (event: FocusEvent) => {
         <div class="hub-category-float">
             <button
                 type="button"
-                class="hub-category-button group block w-full text-start transition-[opacity,scale] duration-700 ease-[cubic-bezier(0.2,0.7,0.1,1)] hover:scale-[1.035] focus-visible:scale-[1.035] focus-visible:outline-none"
-                :class="dimmed ? 'opacity-0' : 'opacity-100'"
+                class="hub-category-button group block w-full text-start transition-[opacity,scale] duration-700 ease-[cubic-bezier(0.2,0.7,0.1,1)] hover:scale-[1.035] focus-visible:scale-[1.035] focus-visible:outline-none [&.is-chosen]:scale-[1.035]"
+                :class="[dimmed ? 'opacity-0' : 'opacity-100', { 'is-chosen': chosen }]"
                 @pointerenter="onPointerEnter"
                 @pointerleave="onPointerLeave"
                 @focus="onFocus"
@@ -62,7 +64,7 @@ const onFocus = (event: FocusEvent) => {
                         <img
                             :src="still"
                             alt=""
-                            class="size-full object-cover brightness-75 saturate-[0.8] transition-[filter,scale] duration-1000 ease-out group-hover:scale-[1.04] group-hover:brightness-100 group-hover:saturate-100 group-focus-visible:brightness-100"
+                            class="size-full object-cover brightness-75 saturate-[0.8] transition-[filter,scale] duration-1000 ease-out group-hover:scale-[1.04] group-hover:brightness-100 group-hover:saturate-100 group-focus-visible:brightness-100 group-[.is-chosen]:scale-[1.04] group-[.is-chosen]:brightness-100 group-[.is-chosen]:saturate-100"
                         />
                     </span>
                     <span class="hub-category-corners" />
@@ -121,7 +123,8 @@ const onFocus = (event: FocusEvent) => {
 }
 
 .hub-category-button:hover .hub-category-corners,
-.hub-category-button:focus-visible .hub-category-corners {
+.hub-category-button:focus-visible .hub-category-corners,
+.hub-category-button.is-chosen .hub-category-corners {
     opacity: 1;
     inset: -10px;
 }
