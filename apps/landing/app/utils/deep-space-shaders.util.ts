@@ -59,23 +59,8 @@ float ign(vec2 p) {
 }
 `;
 
-export const DEEP_SPACE_SCENE = `${PRECISION}
-uniform vec2 uResolution;
-uniform vec2 uPointer;
-uniform vec4 uParams;
-uniform vec4 uHoleParams;
-#define uCamera uParams.x
-#define uWarmth uParams.y
-#define uOctaves uParams.z
-#define uExposure uParams.w
-#define uHole uHoleParams.x
-#define uHoleDistance uHoleParams.y
-#define uIntensity uHoleParams.z
-#define uSkyStars uHoleParams.w
-${NOISE}
-const float LAYER_SPAN = 6.0;
-const float LAYER_NEAR = 0.6;
-
+// Expects a `uWarmth` (0–1) in scope: how far the colours lean toward the brand orange.
+const PALETTE = `
 // Faya's palette: the brand orange (#ff6b0a) and its relatives — amber, copper, burnt umber —
 // set against deep petrol blue and slate teal, the cool colours that pair with orange. Toward
 // the black hole the space warms further toward the brand colour.
@@ -92,7 +77,27 @@ vec3 palette(float hue) {
     float warmShare = mix(smoothstep(0.42, 0.62, hue) * 0.65, 0.95, uWarmth);
     return mix(cool, warm, warmShare);
 }
+`;
 
+export const DEEP_SPACE_SCENE = `${PRECISION}
+uniform vec2 uResolution;
+uniform vec2 uPointer;
+uniform vec4 uParams;
+uniform vec4 uHoleParams;
+uniform float uTime;
+#define uCamera uParams.x
+#define uWarmth uParams.y
+#define uOctaves uParams.z
+#define uExposure uParams.w
+#define uHole uHoleParams.x
+#define uHoleDistance uHoleParams.y
+#define uIntensity uHoleParams.z
+#define uSkyStars uHoleParams.w
+${NOISE}
+const float LAYER_SPAN = 6.0;
+const float LAYER_NEAR = 0.6;
+
+${PALETTE}
 // Three cloud layers, each travelling from far to near and starting again far away with new
 // noise. A layer is fully transparent at both ends of its trip, so the restart never shows.
 vec3 nebula(vec2 p) {
@@ -167,9 +172,38 @@ vec3 heatColour(float t) {
     return mix(color, vec3(1.0, 0.96, 0.9), smoothstep(0.95, 1.5, t));
 }
 
+// One orbit "cycle" of the disc gas, in spin units (the inner edge turns ORBIT_CYCLE / 5.2 rad
+// per cycle).
+const float ORBIT_CYCLE = 12.0;
+
+// Arcs and clumps of gas orbiting the hole, faster inward; the orbit turns with the scroll and,
+// so the hole stays alive when the scroll rests, with time. Differential rotation winds any
+// pattern into rings finer than a pixel, which look still and alias into blocks, so two copies
+// of the gas take turns (flow noise): each is sheared for one cycle only and fades out before it
+// winds up while a fresh one fades in. The blend keeps the contrast constant, so it never pulses.
+float discGas(float angle, float r) {
+    float spin = (uCamera * 5.0 + uTime * 6.0) / ORBIT_CYCLE;
+    float omega = pow(r, -1.5);
+    float sum = 0.0;
+    float weights = 0.0;
+    for (int k = 0; k < 2; k++) {
+        float cycle = spin + float(k) * 0.5;
+        float phase = fract(cycle);
+        float id = floor(cycle) * 2.0 + float(k);
+        vec2 seed = vec2(mod(id * 17.3, 97.0), mod(id * 9.1, 89.0));
+        float swirl = angle - phase * ORBIT_CYCLE * omega;
+        vec2 q = vec2(cos(swirl), sin(swirl)) * 1.8 + vec2(log(r) * 4.5, 0.0) + seed;
+        float weight = 1.0 - abs(2.0 * phase - 1.0);
+        sum += (fbm(q, 3.0) - 0.5) * weight;
+        weights += weight * weight;
+    }
+    float gas = 0.5 + sum / sqrt(max(weights, 0.0001));
+    return 0.15 + 0.85 * smoothstep(0.32, 0.72, gas);
+}
+
 // Light given off where a ray crosses the disc plane: a thin Keplerian disc, hotter inward,
 // Doppler-beamed (the side orbiting toward the camera is brighter and bluer) and
-// gravitationally redshifted. Its turbulence shears with the orbit, which turns with the scroll.
+// gravitationally redshifted.
 vec4 discLight(vec3 hit, vec3 travel) {
     float r = length(hit.xz);
     if (r < DISC_INNER || r > DISC_OUTER) return vec4(0.0);
@@ -179,9 +213,7 @@ vec4 discLight(vec3 hit, vec3 travel) {
     float doppler = 1.0 / (gamma * (1.0 - dot(orbit, -normalize(travel))));
     float shift = doppler * sqrt(1.0 - 1.0 / r);
     float temperature = pow(DISC_INNER / r, 0.75);
-    float swirl = atan(hit.z, hit.x) - uCamera * 5.0 / pow(r, 1.5);
-    vec2 q = vec2(cos(swirl), sin(swirl)) * 3.4 + vec2(log(r) * 2.6, 0.0);
-    float density = 0.25 + 0.75 * smoothstep(0.25, 0.75, fbm(q, 4.0));
+    float density = discGas(atan(hit.z, hit.x), r);
     float edges = smoothstep(DISC_INNER, DISC_INNER + 0.5, r) * smoothstep(DISC_OUTER, DISC_OUTER * 0.5, r);
     float intensity = pow(shift, 3.5) * temperature * temperature * density * edges * 3.2;
     return vec4(heatColour(temperature * shift) * intensity, clamp(density * edges * 1.3, 0.0, 1.0));
@@ -263,26 +295,79 @@ uniform sampler2D uScene;
 uniform vec2 uResolution;
 uniform float uStretch;
 uniform float uReveal;
+// The scene fills only part of its buffer (more of it once the black hole shows): xy scales
+// and zw offsets a 0–1 screen position into it, half a texel in from the edges.
+uniform vec4 uSceneRect;
 ${NOISE}
 const int SAMPLES = 14;
+
+vec3 scene(vec2 uv) {
+    return texture2D(uScene, uSceneRect.zw + clamp(uv, 0.0, 1.0) * uSceneRect.xy).rgb;
+}
 
 void main() {
     vec2 uv = gl_FragCoord.xy / uResolution;
     vec3 color;
     if (uStretch < 0.0005) {
-        color = texture2D(uScene, uv).rgb;
+        color = scene(uv);
     } else {
         vec2 fromCenter = uv - 0.5;
         float jitter = ign(gl_FragCoord.xy);
         vec3 sum = vec3(0.0);
         for (int i = 0; i < SAMPLES; i++) {
             float t = (float(i) + jitter) / float(SAMPLES);
-            sum += texture2D(uScene, 0.5 + fromCenter * (1.0 - uStretch * t)).rgb;
+            sum += scene(0.5 + fromCenter * (1.0 - uStretch * t));
         }
         color = sum / float(SAMPLES);
     }
     color *= uReveal;
     color += (ign(gl_FragCoord.xy + 17.0) - 0.5) / 255.0;
+    gl_FragColor = vec4(color, 1.0);
+}
+`;
+
+// The hub's sky: the tunnel's gas, seen at rest. Two layers drift slowly with time (the hub
+// doesn't scroll) and shift a little with the pointer, the nearer one more. Kept faint and
+// thinned toward the centre, where the hub's frames sit.
+export const HUB_NEBULA = `${PRECISION}
+uniform vec2 uResolution;
+uniform vec2 uPointer;
+uniform vec4 uParams;
+#define uTime uParams.x
+#define uOctaves uParams.y
+#define uIntensity uParams.z
+#define uWarmth uParams.w
+${NOISE}
+${PALETTE}
+vec3 gas(vec2 p) {
+    vec3 color = vec3(0.0);
+    for (int k = 0; k < 2; k++) {
+        float layer = float(k);
+        vec2 drift = vec2(0.011, 0.004) * (1.0 + layer * 0.8) * uTime;
+        vec2 q = p * (0.9 + layer * 0.55) + uPointer * vec2(0.03, 0.02) * (1.0 + layer) + drift + vec2(13.1, 7.7) * (layer + 1.0);
+        // The same self-warp as the tunnel's clouds, turning slowly so the wisps churn.
+        vec2 churn = vec2(uTime * 0.006, -uTime * 0.004);
+        q += vec2(fbm(q * 0.8 + 1.7 + churn, 3.0), fbm(q * 0.8 + 8.3 - churn, 3.0)) * 1.4 - 0.7;
+        float cloud = smoothstep(0.42, 0.9, fbm(q, uOctaves));
+        float dust = fbm(q * 2.3 + 7.0, uOctaves - 1.0);
+        cloud *= 1.0 - 0.6 * smoothstep(0.48, 0.72, dust);
+        float glow = fbm(q * 0.6 + 3.0, 3.0);
+        color += palette(glow + layer * 0.17) * cloud * 0.6;
+    }
+    // A faint band of distant gas across the sky, as in the tunnel.
+    float band = exp(-pow((p.y + p.x * 0.25) * 2.2, 2.0));
+    float grain = fbm(p * 2.5 + 11.0 + uTime * 0.003, uOctaves);
+    color += palette(grain * 0.6) * band * smoothstep(0.3, 0.8, grain) * 0.22;
+    return color;
+}
+
+void main() {
+    vec2 frag = gl_FragCoord.xy;
+    vec2 p = (frag - 0.5 * uResolution) / (0.5 * min(uResolution.x, uResolution.y));
+    vec3 color = gas(p);
+    color *= mix(0.35, 1.0, smoothstep(0.25, 1.2, length(p * vec2(0.8, 1.0))));
+    color = (1.0 - exp(-color * 0.85)) * uIntensity;
+    color += (ign(frag) - 0.5) / 255.0;
     gl_FragColor = vec4(color, 1.0);
 }
 `;

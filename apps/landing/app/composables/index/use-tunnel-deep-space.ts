@@ -17,6 +17,8 @@ export type DeepSpaceFrame = {
     // distance from it in Schwarzschild radii.
     hole: number;
     holeDistance: number;
+    // Seconds, for the black hole's disc to keep orbiting while the scroll rests; 0 holds it still.
+    time: number;
 };
 
 // The scene is ray-traced into a buffer at a fraction of the CSS size (space is soft by
@@ -24,13 +26,16 @@ export type DeepSpaceFrame = {
 // works and stars drawn over it stay sharp.
 const MAX_SCALE = 0.6;
 const PIXEL_BUDGET = 500_000;
+// The black hole's disc has fine detail, so once it shows the scene is drawn sharper.
+const HOLE_SCALE = 0.85;
+const HOLE_PIXEL_BUDGET = 1_000_000;
 const MAX_PIXEL_RATIO = 2;
 const MAX_CANVAS_PIXELS = 4_500_000;
 // Kept dim on purpose: the deep space is atmosphere behind the works, not the subject.
 const EXPOSURE = 0.85;
 const INTENSITY = 0.7;
 
-const SCENE_UNIFORMS = ["uResolution", "uPointer", "uParams", "uHoleParams"];
+const SCENE_UNIFORMS = ["uResolution", "uPointer", "uParams", "uHoleParams", "uTime"];
 
 // Paints the tunnel's deep space and black hole with WebGL, and owns the context the tunnel's
 // stars and works are drawn into after it. Without WebGL it logs why and the tunnel stays black.
@@ -44,8 +49,8 @@ export const useTunnelDeepSpace = () => {
     let quad: WebGLBuffer | null = null;
     let target: WebGLTexture | null = null;
     let framebuffer: WebGLFramebuffer | null = null;
-    let scale = MAX_SCALE;
     let buffer = { width: 1, height: 1 };
+    let sky = { width: 1, height: 1 };
     let octaves = 5;
     let usable = false;
 
@@ -82,7 +87,7 @@ export const useTunnelDeepSpace = () => {
         gl = context;
         element.addEventListener("webglcontextlost", onContextLost);
         scene = createGlProgram(context, DEEP_SPACE_VERTEX, DEEP_SPACE_SCENE, ["aPosition"], SCENE_UNIFORMS);
-        stretch = createGlProgram(context, DEEP_SPACE_VERTEX, DEEP_SPACE_STRETCH, ["aPosition"], ["uScene", "uResolution", "uStretch", "uReveal"]);
+        stretch = createGlProgram(context, DEEP_SPACE_VERTEX, DEEP_SPACE_STRETCH, ["aPosition"], ["uScene", "uResolution", "uStretch", "uReveal", "uSceneRect"]);
         if (!scene || !stretch) return null;
         quad = context.createBuffer();
         context.bindBuffer(context.ARRAY_BUFFER, quad);
@@ -97,8 +102,12 @@ export const useTunnelDeepSpace = () => {
         const ratio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO, Math.sqrt(MAX_CANVAS_PIXELS / (cssWidth * cssHeight)));
         canvas.width = Math.round(cssWidth * ratio);
         canvas.height = Math.round(cssHeight * ratio);
-        scale = Math.min(MAX_SCALE, Math.sqrt(PIXEL_BUDGET / (cssWidth * cssHeight)));
-        buffer = { width: Math.max(1, Math.round(cssWidth * scale)), height: Math.max(1, Math.round(cssHeight * scale)) };
+        const sized = (maxScale: number, budget: number) => {
+            const scale = Math.min(maxScale, Math.sqrt(budget / (cssWidth * cssHeight)));
+            return { width: Math.max(1, Math.round(cssWidth * scale)), height: Math.max(1, Math.round(cssHeight * scale)) };
+        };
+        sky = sized(MAX_SCALE, PIXEL_BUDGET);
+        buffer = sized(HOLE_SCALE, HOLE_PIXEL_BUDGET);
         octaves = cssWidth < 768 ? 4 : 5;
         if (usable) createTarget(gl);
     };
@@ -117,12 +126,14 @@ export const useTunnelDeepSpace = () => {
         bindQuad(context);
 
         context.bindFramebuffer(context.FRAMEBUFFER, framebuffer);
-        context.viewport(0, 0, buffer.width, buffer.height);
+        const size = frame.hole > 0 ? buffer : sky;
+        context.viewport(0, 0, size.width, size.height);
         context.useProgram(scene.program);
-        context.uniform2f(uniforms.uResolution!, buffer.width, buffer.height);
+        context.uniform2f(uniforms.uResolution!, size.width, size.height);
         context.uniform2f(uniforms.uPointer!, frame.pointer.x, frame.pointer.y);
         context.uniform4f(uniforms.uParams!, frame.camera, frame.warmth, octaves, EXPOSURE);
         context.uniform4f(uniforms.uHoleParams!, frame.hole, frame.holeDistance, INTENSITY, frame.hole);
+        context.uniform1f(uniforms.uTime!, frame.time);
         context.drawArrays(context.TRIANGLE_STRIP, 0, 4);
 
         context.bindFramebuffer(context.FRAMEBUFFER, null);
@@ -134,6 +145,13 @@ export const useTunnelDeepSpace = () => {
         context.uniform2f(stretch.uniforms.uResolution!, canvas.width, canvas.height);
         context.uniform1f(stretch.uniforms.uStretch!, frame.stretch);
         context.uniform1f(stretch.uniforms.uReveal!, frame.reveal);
+        context.uniform4f(
+            stretch.uniforms.uSceneRect!,
+            (size.width - 1) / buffer.width,
+            (size.height - 1) / buffer.height,
+            0.5 / buffer.width,
+            0.5 / buffer.height,
+        );
         context.drawArrays(context.TRIANGLE_STRIP, 0, 4);
     };
 

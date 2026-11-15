@@ -68,6 +68,7 @@ onBeforeUnmount(() => {
         :aria-label="$t('landing.hub.label')"
     >
         <div class="pointer-events-none fixed inset-0">
+            <LandingIndexHubNebula class="absolute inset-0" />
             <LandingIndexIntroStarfield :visible="true" />
             <LandingIndexSkyEvents :active="true" />
         </div>

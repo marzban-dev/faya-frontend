@@ -24,6 +24,10 @@ const STREAK_PER_SPEED = 0.08;
 // How far deep-space objects smear outward per unit of camera speed, and the most they may.
 const STRETCH_PER_SPEED = 0.03;
 const MAX_STRETCH = 0.3;
+// Extra brightness of the gas and stars at the tunnel's start, easing back to normal by
+// START_GLOW_UNTIL (share of the tunnel).
+const START_GLOW = 0.3;
+const START_GLOW_UNTIL = 0.45;
 const POINTER_EASE_RATE = 2.5;
 
 const layer = ref<HTMLElement | null>(null);
@@ -113,18 +117,20 @@ const render = (time: number) => {
 
     const view: TunnelView = { width, height, pointer };
     const holeDistance = blackHoleDistance(phase);
+    const glow = 1 + START_GLOW * (1 - Math.min(1, Math.max(0, progress / START_GLOW_UNTIL)) ** 2);
     deepSpace.render({
         camera: phase.camera,
         pointer,
         warmth: Math.min(1, Math.max(0, (progress - 0.4) / 0.55)),
         stretch: reducedMotion ? 0 : Math.min(MAX_STRETCH, speed * STRETCH_PER_SPEED) + phase.fall * 0.3,
-        reveal: phase.reveal,
+        reveal: phase.reveal * glow,
         hole: phase.hole,
         holeDistance,
+        time: reducedMotion ? 0 : seconds,
     });
     const funnel = funnelAt(phase.hole, phase.fall, blackHoleShadowRadius(phase, DEEP_SPACE_FOCAL));
     const streak = Math.min(1.2, 0.004 + speed * STREAK_PER_SPEED + phase.fall * 0.7);
-    const starStrength = phase.reveal * 0.6 * starsFade(phase.hole, phase.fall);
+    const starStrength = phase.reveal * glow * 0.6 * starsFade(phase.hole, phase.fall);
     const starCount = writeStarStreaks(objects.starData, stars, view, phase.camera + drift, streak, starStrength, funnel);
     objects.render(starCount, panelsAt(view, phase.camera, phase.reveal));
 };
