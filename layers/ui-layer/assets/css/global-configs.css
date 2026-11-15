@@ -1,10 +1,27 @@
-/* Inter, subset to Latin; the variable file covers every weight. */
+/* Geist, Latin; the variable file covers every weight. The English UI and body font. */
 @font-face {
-    font-family: "Inter";
+    font-family: "Geist";
     font-style: normal;
     font-weight: 100 900;
     font-display: swap;
-    src: url("/fonts/Inter/inter-variable.woff2") format("woff2");
+    src: url("/fonts/Geist/geist-variable.woff2") format("woff2");
+}
+
+/* Instrument Serif, subset to Latin: the English display face for headlines. Regular only. */
+@font-face {
+    font-family: "Instrument Serif";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/fonts/InstrumentSerif/instrument-serif-regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Instrument Serif";
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/fonts/InstrumentSerif/instrument-serif-italic.woff2") format("woff2");
 }
 
 /* Geist Mono, subset to Latin; used for code and for the small label text. */
@@ -31,16 +48,19 @@ html[lang^="fa"],
 html[lang^="ar"] {
     --app-font: var(--font-yekanbakh);
     --app-label-font: var(--font-yekanbakh);
+    --app-display-font: var(--font-yekanbakh);
 }
 
 html[lang^="en"] {
     --app-font: var(--font-latin);
     --app-label-font: var(--font-mono);
+    --app-display-font: var(--font-serif-latin);
 }
 
 :root {
     --app-font: var(--font-latin);
     --app-label-font: var(--font-mono);
+    --app-display-font: var(--font-serif-latin);
 
     scroll-behavior: smooth;
 
@@ -69,11 +89,13 @@ html[lang^="en"] {
 
     /* FONT FAMILY */
     --font-yekanbakh: "YekanBakh", sans-serif;
-    --font-latin: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-latin: "Geist", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-serif-latin: "Instrument Serif", "Times New Roman", serif;
 
     --font-sans: var(--app-font);
     --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
     --font-label: var(--app-label-font);
+    --font-display: var(--app-display-font);
 
     /* BREAKPOINTS */
     --breakpoint-2xs: 400px;

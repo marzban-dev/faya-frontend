@@ -1,6 +1,7 @@
 // imports
 
 import publicAssetSizes from "#landing/public-asset-sizes";
+import { INTRO_SEEN_COOKIE } from "../../app/utils/intro-seen.util";
 import {
     introReadyFrameUrls,
     toPublicPath,
@@ -87,6 +88,7 @@ export default defineNitroPlugin((nitroApp) => {
     nitroApp.hooks.hook("render:html", (html, { event }) => {
         const path = event.path.split("?")[0]!;
         if (path !== "/" && path !== baseURL && `${path}/` !== baseURL) return;
+        if (getCookie(event, INTRO_SEEN_COOKIE) && getQuery(event).intro === undefined) return;
         const data: IntroLoadData = { assets: bootAssetPaths(html.head.join("")).map(sized), frames };
         const json = JSON.stringify(data).replaceAll("<", "\\u003c");
         html.head.push(`<script>(${trackIntroLoad.toString()})(${json})</script>`);
