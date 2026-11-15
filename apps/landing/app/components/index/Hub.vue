@@ -3,8 +3,6 @@
 
 defineProps<{ fromTunnel?: boolean }>();
 
-const emit = defineEmits<{ open: [id: HubCategoryId] }>();
-
 // states
 
 const POINTER_EASE_RATE = 3;
@@ -16,6 +14,11 @@ let target = { x: 0, y: 0 };
 let pointer = { x: 0, y: 0 };
 let lastTime = 0;
 let animationFrame = 0;
+let reducedMotion = false;
+const morph = useCategoryMorph();
+const leaving = ref(false);
+// Coming back from a field, its slide shrinks into its frame here (CategoryMorphLayer).
+const returnedTo = morph.value?.direction === "close" ? morph.value.id : null;
 
 // methods
 
@@ -25,6 +28,33 @@ const activate = (id: HubCategoryId) => {
 
 const deactivate = (id: HubCategoryId) => {
     if (active.value === id) active.value = null;
+};
+
+const frameOf = (id: HubCategoryId) => {
+    const frame = root.value?.querySelector(`[data-id="${id}"] .hub-category-frame`);
+    const image = frame?.querySelector("img");
+    return frame && image ? { frame, image } : null;
+};
+
+// The chosen frame lifts off at once and grows towards the field's first slide while the rest
+// of the hub fades and the field's page loads underneath it.
+const open = (id: HubCategoryId) => {
+    if (leaving.value) return;
+    const found = reducedMotion ? null : frameOf(id);
+    if (found) {
+        cancelAnimationFrame(animationFrame);
+        morph.value = {
+            id,
+            direction: "open",
+            rect: rectOf(found.frame),
+            src: found.image.currentSrc || found.image.src,
+            look: lookOf(found.frame, found.image),
+            stage: "flying",
+            flight: performance.now(),
+        };
+        leaving.value = true;
+    }
+    navigateTo(`/${id}`);
 };
 
 const onPointerMove = (event: PointerEvent) => {
@@ -48,7 +78,8 @@ const tick = (time: number) => {
 // lifecycle
 
 onMounted(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) return;
     if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     animationFrame = requestAnimationFrame(tick);
@@ -65,6 +96,7 @@ onBeforeUnmount(() => {
     <section
         ref="root"
         class="fixed inset-0 overflow-x-hidden overflow-y-auto bg-black text-neutral-100 md:overflow-hidden"
+        :class="{ 'hub-leaving': leaving, 'hub-returning': returnedTo }"
         :aria-label="$t('landing.hub.label')"
     >
         <div class="pointer-events-none fixed inset-0">
@@ -83,9 +115,11 @@ onBeforeUnmount(() => {
                     :category="category"
                     :index="index"
                     :dimmed="active !== null && active !== category.id"
+                    :returning="morph?.direction === 'close' && morph.stage === 'flying' && morph.id === category.id"
+                    :skip-arrival="returnedTo === category.id"
                     @activate="activate(category.id)"
                     @deactivate="deactivate(category.id)"
-                    @open="emit('open', category.id)"
+                    @open="open(category.id)"
                 />
             </li>
         </ul>
@@ -101,6 +135,26 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+.hub-leaving > * {
+    opacity: 0;
+    transition: opacity 260ms ease-out;
+}
+
+/* Back from a field: everything arrives quickly around the frame that is landing. */
+.hub-returning :deep(.hub-category) {
+    animation-duration: 0.7s;
+    animation-delay: calc(var(--index) * 50ms);
+}
+
+.hub-returning .hub-fade-in {
+    animation-delay: 0.1s;
+    animation-duration: 0.5s;
+}
+
+.hub-leaving :deep(.hub-category-float) {
+    animation-play-state: paused;
+}
+
 .hub-vignette {
     background: radial-gradient(ellipse at center, transparent 45%, rgb(0 0 0 / 0.75) 100%);
 }

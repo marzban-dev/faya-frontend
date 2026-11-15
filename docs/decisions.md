@@ -4,6 +4,44 @@ Newest first. Each entry: date, decision, and why if it isn't obvious.
 
 ## 2026-11-15
 
+- **Field pages page slide by slide (reverses "scrolls freely" below).** One wheel gesture,
+  swipe or arrow/Page key moves exactly one stop (each slide, then the finale fully closed); a
+  hand-written **heavy, critically damped spring** (stiffness 70, no bounce or overshoot, about
+  0.85 s per page; the team asked for "massive, not bouncy") carries the page there and keeps its speed if a new gesture lands mid-flight. On touch the strip follows the
+  finger 1:1 and the spring takes over from the release speed. Native scrolling is off on these
+  pages (Lenis isn't used there any more); reduced motion jumps straight to the slide. The team
+  had rejected one-slide-per-gesture paging earlier; asked for again with a spring.
+- **The round × on the field pages is gone:** visitors didn't understand it. In its place, a
+  labelled **"← Back to all fields"** link next to the logo in the header (on phones just the arrow, placed before
+  the logo: the header has no room for the words, and next to "Gallery" it read as part of it).
+- **The header frosts on the field pages** (backdrop blur under a black gradient, 55% at the top fading to nothing; the blur fades with it, so no hard edge) once the
+  page has moved off the first slide, so slides passing under it don't fight the links.
+- **Field pages kept light (performance pass):** scroll effects write transforms straight onto
+  the few moving elements (only when a value changes, on their own GPU layers), never CSS
+  variables on whole slides (that made the browser restyle everything inside them every frame:
+  600 ms of style work per 3 s of scrolling, now 40 ms). The custom cursor's loop sleeps when the
+  mouse is still; the film grain layer is 16% larger than the screen instead of twice its size;
+  scroll smoothing on the field pages is lighter (Lenis lerp 0.12) than the intro's (0.07).
+- **Phase 2 built: field pages.** Each field has its own page (`/film`, `/design`, `/commercial`,
+  `/lab`) so it can be linked and indexed. The team chose:
+  - **steps = the field's 5 services** (placeholder copy until the team writes the real steps);
+  - **slides that follow `steps-of-work.mov` closely**, after several rounds (rejected: a
+    scroll-linked stack, a 3D drum roll, one-slide-per-gesture paging, letters flipping/fading
+    in and out, tall "TV" corners, a cream "now showing" box, a labelled step rail): the page
+    **scrolls freely** (Lenis-smoothed); the slides are **flat** on one vertical strip with
+    plain rounded corners, the next one's top edge peeking from below; the picture lags behind
+    its slide and **the text has strong parallax, so the slide's edges visibly cut it** as it
+    comes and goes. The right edge is **minimal**: current step number, a thin line that fills
+    as you scroll, the total; a small round × (back to the hub) at top right *(later replaced, see above)*;
+  - **scrolling up at the very top goes back to the hub at once** (the slide shrinks into its
+    frame, no pause);
+  - scrolling on past the last slide: **black stripes close like blinds** (with the scroll), then **"Let's work
+    together"**, which opens **Contact** (forms are still postponed).
+- **The hub frame morphs into the page, fast:** the frame lives in a layer shared by the hub and
+  the field pages (the `landing` layout), so it starts moving the moment you click and keeps
+  moving while the page changes underneath (about 0.7 s). Closing does the same in reverse from
+  the current slide. No morph under reduced motion.
+- **Contact is its own domain** (`apps/contact`), with placeholder details.
 - **The black hole is alive:** its disc is arcs and clumps of gas that keep orbiting with time
   (inner edge about once every 5 s, inner rings faster than outer); only the orbit, no gas churn or
   pulsing (tried and removed). The first version wound the gas into fine rings that looked still and

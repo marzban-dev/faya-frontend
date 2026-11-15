@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // imports
 
-definePageMeta({ title: "landing.title" });
+definePageMeta({ title: "landing.title", layout: "landing" });
 
 // states
 
@@ -11,6 +11,9 @@ const introSeen = useCookie<boolean | null>(INTRO_SEEN_COOKIE, { maxAge: INTRO_S
 const replay = route.query.intro !== undefined;
 const screen = ref<"intro" | "hub">(introSeen.value && !replay ? "hub" : "intro");
 const arrivedFromTunnel = ref(false);
+const morph = useCategoryMorph();
+// A field's page shrinks back only into the hub; when the intro plays instead, drop it.
+if (screen.value === "intro") morph.value = null;
 
 // methods
 
@@ -26,8 +29,6 @@ const arrive = () => {
          background would flash between the intro leaving and the hub arriving. -->
     <main class="bg-black">
         <h1 class="sr-only">{{ $t("landing.title") }}</h1>
-        <!-- TODO: Phase 2 handles the hub's @open: the chosen frame morphs to fullscreen and
-             opens that field's steps of work. -->
         <!-- No transition: the tunnel ends inside the black hole and the hub starts in that same
              darkness. -->
         <LandingIndexIntro v-if="screen === 'intro'" @arrive="arrive" />

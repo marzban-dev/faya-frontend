@@ -10,6 +10,7 @@ session; update it whenever a decision is made or changed.
 | [product/services.md](product/services.md) | The 4 categories (Film, Design, Commercial, Lab) and their services. |
 | [product/requests-and-pricing.md](product/requests-and-pricing.md) | Request forms, pricing models, payment, retainer. **Postponed.** |
 | [product/hidden-gift.md](product/hidden-gift.md) | The hidden gift game. **Postponed.** |
+| [product/ideas.md](product/ideas.md) | Parked ideas for distinctive experiences (Contact as a screenplay, credits, light table…). Not decided. |
 | [design/direction.md](design/direction.md) | Visual direction: references, fonts, colours, grain, motion. |
 | [engineering/intro.md](engineering/intro.md) | How the built intro works (logo → eye → video). |
 | [open-questions.md](open-questions.md) | Things waiting on the team: assets, answers, decisions. |

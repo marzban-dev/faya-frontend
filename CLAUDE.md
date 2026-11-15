@@ -290,7 +290,7 @@ Root `app/` has two jobs and nothing else:
 
 Every folder under `apps/` is a Nuxt layer, one per domain, pulled in by `extends` in the
 root `nuxt.config.ts` (unlike `layers/`, `apps/` is not auto-registered). Domains:
-`landing` (the home page). Add a new domain for each new area of the site.
+`landing` (the home page, the hub and the field pages), `contact` (the Contact page). Add a new domain for each new area of the site.
 
 Each layer declares its own component prefix in its local `nuxt.config.ts` (`Landing`,
 …), and adds `models`, `repositories` and `queries/**` to `imports.dirs` once it has

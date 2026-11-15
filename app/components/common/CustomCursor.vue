@@ -30,9 +30,17 @@ let stuckTo: HTMLElement | null = null;
 
 // methods
 
+// The loop sleeps once the viewfinder has caught up with a still mouse; movement wakes it.
+const wake = () => {
+    if (!enabled.value || animationFrame) return;
+    lastTime = 0;
+    animationFrame = requestAnimationFrame(tick);
+};
+
 const onPointerMove = (event: PointerEvent) => {
     if (event.pointerType !== "mouse") return;
     pointer = { x: event.clientX, y: event.clientY };
+    wake();
     if (visible.value) return;
     frameAt = { ...pointer };
     visible.value = true;
@@ -44,6 +52,7 @@ const onPointerOver = (event: PointerEvent) => {
     label.value = text ?? "";
     mode.value = text ? "label" : element ? "link" : "default";
     stickTo(mode.value === "link" ? element : null);
+    wake();
 };
 
 const stickTo = (element: HTMLElement | null) => {
@@ -71,7 +80,6 @@ const onPointerUp = () => (pressed.value = false);
 const onLeaveWindow = () => (visible.value = false);
 
 const tick = (time: number) => {
-    animationFrame = requestAnimationFrame(tick);
     const delta = lastTime ? Math.min(time - lastTime, 100) / 1000 : 0;
     lastTime = time;
     const ease = reducedMotion ? 1 : 1 - Math.exp(-delta * FRAME_EASE_RATE);
@@ -79,6 +87,9 @@ const tick = (time: number) => {
     frameAt = { x: frameAt.x + (target.x - frameAt.x) * ease, y: frameAt.y + (target.y - frameAt.y) * ease };
     if (mark.value) mark.value.style.transform = `translate3d(${pointer.x}px, ${pointer.y}px, 0)`;
     if (frame.value) frame.value.style.transform = `translate3d(${frameAt.x}px, ${frameAt.y}px, 0)`;
+    // A framed element can move under a still mouse (scrolling), so keep following it.
+    const settled = !stuckTo && Math.abs(target.x - frameAt.x) < 0.05 && Math.abs(target.y - frameAt.y) < 0.05;
+    animationFrame = settled ? 0 : requestAnimationFrame(tick);
 };
 
 const enable = () => {
@@ -90,8 +101,7 @@ const enable = () => {
     window.addEventListener("pointerdown", onPointerDown, { passive: true });
     window.addEventListener("pointerup", onPointerUp, { passive: true });
     document.documentElement.addEventListener("mouseleave", onLeaveWindow);
-    lastTime = 0;
-    animationFrame = requestAnimationFrame(tick);
+    wake();
 };
 
 const disable = () => {
@@ -104,6 +114,7 @@ const disable = () => {
     window.removeEventListener("pointerup", onPointerUp);
     document.documentElement.removeEventListener("mouseleave", onLeaveWindow);
     cancelAnimationFrame(animationFrame);
+    animationFrame = 0;
 };
 
 const onPointerTypeChange = (event: MediaQueryListEvent) => (event.matches ? enable() : disable());

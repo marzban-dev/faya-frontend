@@ -90,6 +90,150 @@
                     "summary": "Research & experimentation"
                 }
             }
+        },
+        "category": {
+            "close": "Close",
+            "back": "Back to all fields",
+            "steps_label": "Steps of work",
+            "step_count": "{current} / {total}",
+            "start": "Start a project",
+            "steps": {
+                "film": {
+                    "development": {
+                        "title": "Development",
+                        "text": "Every film starts as an idea worth fighting for. We shape it into a story, a treatment and a plan that can be financed.",
+                        "deliverables": "Treatment · Script · Pitch deck"
+                    },
+                    "pre_production": {
+                        "title": "Pre-production",
+                        "text": "Casting, locations, crew and schedule: the film is made on paper before a single frame is shot.",
+                        "deliverables": "Casting · Locations · Shooting plan"
+                    },
+                    "production": {
+                        "title": "Production",
+                        "text": "On set, with the camera rolling, and a crew that knows the story it is telling.",
+                        "deliverables": "Direction · Cinematography · Sound"
+                    },
+                    "post_production": {
+                        "title": "Post-production",
+                        "text": "Edit, colour, sound and effects turn the footage into the film.",
+                        "deliverables": "Edit · Colour grade · Sound mix · VFX"
+                    },
+                    "distribution": {
+                        "title": "Distribution & Sales",
+                        "text": "Festivals, platforms and audiences: we take the finished film to the people it was made for.",
+                        "deliverables": "Festivals · Sales · Release"
+                    }
+                },
+                "design": {
+                    "film_graphics": {
+                        "title": "Film Graphics",
+                        "text": "Titles, credits and on-screen type designed as part of the picture, not added on top.",
+                        "deliverables": "Title sequences · Credits · Motion graphics"
+                    },
+                    "poster_design": {
+                        "title": "Poster Design",
+                        "text": "One image that has to sell the whole film. We find it.",
+                        "deliverables": "Key art · Posters · Campaign variants"
+                    },
+                    "visual_identity": {
+                        "title": "Visual Identity",
+                        "text": "Logo, type, colour and the rules that hold them together.",
+                        "deliverables": "Logo · Typography · Guidelines"
+                    },
+                    "brand_strategy": {
+                        "title": "Brand Strategy",
+                        "text": "Who you are, who you speak to and why it matters, settled before anything is designed.",
+                        "deliverables": "Research · Positioning · Brand platform"
+                    },
+                    "brand_storytelling": {
+                        "title": "Brand Storytelling",
+                        "text": "The story behind the brand, told in words and images people remember.",
+                        "deliverables": "Narrative · Tone of voice · Content"
+                    }
+                },
+                "commercial": {
+                    "advertising_films": {
+                        "title": "Advertising Films",
+                        "text": "Commercials made with a filmmaker's eye, from script to final cut.",
+                        "deliverables": "Concept · Production · Final cut"
+                    },
+                    "social_content": {
+                        "title": "Social Content",
+                        "text": "Short, sharp content made for the feed and the format it lives in.",
+                        "deliverables": "Reels · Stories · Cutdowns"
+                    },
+                    "campaign_production": {
+                        "title": "Campaign Production",
+                        "text": "One idea carried across film, stills and every channel it needs.",
+                        "deliverables": "Campaign film · Stills · Rollout"
+                    },
+                    "ai_production": {
+                        "title": "AI Production",
+                        "text": "Generative tools in a director's hands: new images, made fast and made well.",
+                        "deliverables": "AI imagery · AI video · Hybrid shoots"
+                    },
+                    "photography": {
+                        "title": "Photography",
+                        "text": "Stills of products, people and places, lit and framed with intent.",
+                        "deliverables": "Product · Portrait · Lifestyle"
+                    }
+                },
+                "lab": {
+                    "ai_research": {
+                        "title": "AI Research",
+                        "text": "We test what new models can do for images and stories before it becomes common.",
+                        "deliverables": "Model tests · Workflows · Reports"
+                    },
+                    "visual_experiments": {
+                        "title": "Visual Experiments",
+                        "text": "Looks, techniques and processes, tried for their own sake.",
+                        "deliverables": "Look development · Tests · Prototypes"
+                    },
+                    "new_media": {
+                        "title": "New Media",
+                        "text": "Work for screens and spaces that are still being invented.",
+                        "deliverables": "Interactive · Installations · XR"
+                    },
+                    "creative_rnd": {
+                        "title": "Creative R&D",
+                        "text": "Research and development for ideas that need a new way to be made.",
+                        "deliverables": "Research · Tooling · Pilots"
+                    },
+                    "original_concepts": {
+                        "title": "Original Concepts",
+                        "text": "Our own ideas, developed from a spark into formats and IP.",
+                        "deliverables": "Formats · IP · Pilots"
+                    }
+                }
+            },
+            "cta": {
+                "eyebrow": "Your project",
+                "title": "Let's work together",
+                "text": "Tell us what you're making, and we'll take it from there.",
+                "button": "Start a conversation"
+            }
+        }
+    },
+    "contact": {
+        "title": "Contact",
+        "eyebrow": "Contact",
+        "heading": "Let's work together",
+        "text": "Tell us about your project. Write to us, call, or send a message, whichever suits you.",
+        "about": "About: {field}",
+        "subject": "Project enquiry: {field}",
+        "subject_general": "Project enquiry",
+        "fields": {
+            "film": "Film",
+            "design": "Design",
+            "commercial": "Commercial",
+            "lab": "Lab"
+        },
+        "channels": {
+            "label": "Ways to reach us",
+            "email": "Email",
+            "phone": "Phone",
+            "instagram": "Instagram"
         }
     },
     "shell": {
