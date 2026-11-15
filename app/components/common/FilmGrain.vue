@@ -7,7 +7,8 @@
    moving one composited layer costs almost nothing, unlike redrawing noise on a canvas. */
 .film-grain {
     position: fixed;
-    inset: -50%;
+    /* Just enough margin for the largest shift below (7%). */
+    inset: -8%;
     z-index: 60;
     pointer-events: none;
     opacity: 0.075;

@@ -5,7 +5,14 @@
 - [ ] New intro video (with works flying out of the eye).
 - [ ] Real works (images/videos) for the tunnel and Gallery. Sintel (CC-BY) samples are used until then.
 - [ ] A hover video for each of the 4 categories. Samples until then.
-- [ ] Real English copy for categories, steps of work, About, Contact.
+- [ ] Real English copy for categories, steps of work, About, Contact. The field pages use
+  placeholder text written from the service names (`landing.category.steps.*`).
+- [ ] Faya's real email, phone and Instagram for the Contact page (placeholders in
+  `apps/contact/app/utils/contact-channels.util.ts`).
+- [ ] For each field: a still that is the **first frame** of its video, so the hub frame's
+  picture hands over to the playing video without a cut. Videos without baked-in black bars
+  (the Sintel samples have them; the cards crop them for now).
+- [ ] Footage for each step of each field (sample works for now).
 - [ ] List of fixed-price services and their prices.
 - [ ] Final pricing / business plan for every service (only Brand Strategy exists).
 - [ ] Logo as SVG, if one exists (the current one is traced).

@@ -3,7 +3,7 @@ export default defineNuxtConfig({
 
     devtools: { enabled: true },
 
-    extends: ["./apps/landing"],
+    extends: ["./apps/landing", "./apps/contact"],
 
     // Precompressed .br/.gz copies of the built files, served to browsers that accept them.
     // Server-rendered pages are compressed by server/plugins/compress-html.ts.

@@ -21,14 +21,24 @@ intro plays again next time. After that, the site opens directly on the hub.
 - Background: black + stars (+ film grain). ✅
 - **Hover** a category → a low-opacity video for that field fades in behind everything.
   Mouse out → back to black and stars. ✅ (sample videos)
-- **Click** → the box morphs into fullscreen and opens the category. 🟡 Phase 2
-- **Touch devices:** first tap opens the category (no hover preview). 🟡 Phase 2
+- **Click** → the rest of the hub fades, the frame grows into the field's first card and
+  the page opens at `/film`, `/design`, `/commercial` or `/lab`. **Close** (or the browser's
+  back button) shrinks the current card back into its hub frame. ✅
+- **Touch devices:** first tap opens the category (no hover preview). ✅
 
 ## 3. Category page
 
 - After the morph: the steps of doing that kind of work, revealed with scroll, like
-  `steps-of-work.mov`. 🟡
-- Ends with a **"Let's work together" CTA button**. 🟡
+  `steps-of-work.mov`: one full slide per step (for now the field's 5 services) on a strip
+  that pages slide by slide (one wheel flick, swipe or arrow key = one slide, carried by a
+  spring); the slide in view becomes current and its text animates in. Paging up from the first
+  slide returns to the hub, and so does the **"← Back to all fields"** link next to the logo.
+  The header frosts (blur under a top-to-bottom black gradient) once the page has moved. ✅ (placeholder copy and
+  sample footage)
+- Ends with black stripes closing like blinds, then a **"Let's work together" CTA button**
+  that opens **Contact** with the field (`/contact?field=film`). ✅
+- A shared link opens the page directly, without the morph. Closing it then goes to `/`,
+  which plays the intro if the visitor hasn't seen it.
 
 ## 4. Request flow ⏸
 
@@ -38,7 +48,9 @@ and pricing is final.
 ## 5. Other pages
 
 - **Gallery** — portfolio of all works, filterable by category. 🟡 (not designed yet)
-- **About**, **Contact**, **Pricing** — not designed yet. ❓
+- **Contact** — a simple page: heading, and email, phone and Instagram (placeholders until
+  the team sends the real ones); names the field when opened from a field's CTA. ✅
+- **About**, **Pricing** — not designed yet. ❓
 - **Hidden gift** — [hidden-gift.md](hidden-gift.md). ⏸
 
 ## Language

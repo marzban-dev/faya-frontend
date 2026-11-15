@@ -10,8 +10,10 @@ export type SmoothScroll = {
 };
 
 // Lenis smooths wheel scrolling; touch keeps the platform's own momentum. With reduced
-// motion Lenis isn't started and plain scroll events drive the callbacks instead.
-export const useSmoothScroll = (): SmoothScroll => {
+// motion Lenis isn't started and plain scroll events drive the callbacks instead. `lerp` is how
+// much of the remaining distance each frame covers: lower glides longer (the intro's scrubbing),
+// higher follows the hand more closely.
+export const useSmoothScroll = (lerp = 0.07): SmoothScroll => {
     // states
 
     let lenis: Lenis | null = null;
@@ -57,7 +59,7 @@ export const useSmoothScroll = (): SmoothScroll => {
 
         const { default: LenisClass } = await import("lenis");
         if (unmounted) return;
-        lenis = new LenisClass({ autoRaf: true, lerp: 0.07 });
+        lenis = new LenisClass({ autoRaf: true, lerp });
         lenis.on("scroll", (instance) => emit(instance.scroll));
         applyLock();
     });

@@ -1,7 +1,15 @@
 <script setup lang="ts">
 // imports
 
-const props = defineProps<{ category: HubCategory; index: number; dimmed: boolean }>();
+const props = defineProps<{
+    category: HubCategory;
+    index: number;
+    dimmed: boolean;
+    // A field's page is shrinking back into this frame: hide it until it lands, and don't play
+    // the arrival (it would restart, blurred, once the frame shows).
+    returning?: boolean;
+    skipArrival?: boolean;
+}>();
 
 const emit = defineEmits<{ activate: []; deactivate: []; open: [] }>();
 
@@ -36,7 +44,7 @@ const onFocus = (event: FocusEvent) => {
 </script>
 
 <template>
-    <div class="hub-category" :data-id="category.id" :style="placement">
+    <div class="hub-category" :data-id="category.id" :data-skip-arrival="skipArrival || undefined" :style="placement">
         <div class="hub-category-float">
             <button
                 type="button"
@@ -50,7 +58,7 @@ const onFocus = (event: FocusEvent) => {
                 @click="emit('open')"
             >
                 <span class="relative block">
-                    <span class="hub-category-frame block overflow-hidden bg-neutral-900">
+                    <span class="hub-category-frame block overflow-hidden bg-neutral-900" :class="{ 'opacity-0': returning }">
                         <img
                             :src="still"
                             alt=""
@@ -82,6 +90,10 @@ const onFocus = (event: FocusEvent) => {
 
 .hub-category-frame {
     aspect-ratio: var(--aspect);
+}
+
+.hub-category[data-skip-arrival] {
+    animation: none;
 }
 
 /* Viewfinder crop marks around the frame of the field in focus. */
