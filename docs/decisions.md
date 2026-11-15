@@ -4,6 +4,21 @@ Newest first. Each entry: date, decision, and why if it isn't obvious.
 
 ## 2026-11-15
 
+- **The black hole is alive:** its disc is arcs and clumps of gas that keep orbiting with time
+  (inner edge about once every 5 s, inner rings faster than outer); only the orbit, no gas churn or
+  pulsing (tried and removed). The first version wound the gas into fine rings that looked still and
+  pixelated, so the disc now uses flow noise (two gas copies taking turns, neither winding up), and
+  the scene is drawn sharper (85% of screen size, up from 60%) once the hole shows. This
+  is the one part of the tunnel that moves with time as well as scroll; scroll still drives the
+  approach and the fall. Held still under reduced motion.
+- **Hub sky has the tunnel's galaxy fog**, kept subtle (thinner in the centre, where the frames sit).
+  It's the same WebGL gas and palette as the tunnel, drifting slowly with time and the pointer, and
+  held still under reduced motion. Without WebGL the hub has no fog.
+- **Cinematic letterbox bars on the intro video:** black bars at the top and bottom (a 2.1:1 frame,
+  at least 5% of the height each) close in a few frames into the video and open again before the
+  tunnel. They follow the scroll.
+- **The tunnel starts a little brighter:** gas and stars are 30% brighter as it opens, easing back to
+  normal by about 45% of the way through.
 - **The whole tunnel is one 3D WebGL scene** (the team called the flat 2D works "trash"): works are lit
   3D panels in perspective, turned toward the tunnel's axis; stars are 3D streaks. The 2D canvas is
   gone: **without WebGL the tunnel stays black** (accepted; the console says why).

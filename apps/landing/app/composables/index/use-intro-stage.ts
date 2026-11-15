@@ -10,6 +10,7 @@ type IntroElements = {
     logoShade: Ref<HTMLElement | null>;
     introCanvas: Ref<HTMLCanvasElement | null>;
     hint: Ref<HTMLElement | null>;
+    letterbox: Ref<HTMLElement | null>;
     tunnel: Ref<{ setProgress: (progress: number) => void } | null>;
 };
 
@@ -18,6 +19,10 @@ const MAX_PIXEL_RATIO = 2;
 // so it reaches 100% when the logo holds and scrolling unlocks, not seconds before.
 const LOADING_SHARE = 0.9;
 const PROGRESS_EASE_RATE = 8;
+// Shares of the intro frames: the letterbox closes in after the first few and opens again
+// before the tunnel.
+const LETTERBOX_IN = [0.03, 0.1] as const;
+const LETTERBOX_OUT = [0.9, 1] as const;
 
 // Drives the landing intro: the logo loops while the page loads, then scroll zooms into its
 // eye, scrubs through the intro frames and flies through the tunnel. Everything is drawn
@@ -155,6 +160,14 @@ export const useIntroStage = (elements: IntroElements, onArrive: () => void) => 
         if (!reveal.complete) maskToReveal(introContext, pupil, reveal);
     };
 
+    const easeBetween = (from: number, to: number, value: number) => {
+        const t = Math.min(1, Math.max(0, (value - from) / (to - from)));
+        return t * t * (3 - 2 * t);
+    };
+
+    const letterboxAt = (frames: number) =>
+        easeBetween(LETTERBOX_IN[0], LETTERBOX_IN[1], frames) * (1 - easeBetween(LETTERBOX_OUT[0], LETTERBOX_OUT[1], frames));
+
     // Share of the bytes the intro waits for that have arrived, as tracked from the page's
     // <head> by server/plugins/intro-load-progress.ts; the frames' own count if that's missing.
     const loadedShare = () => {
@@ -190,6 +203,9 @@ export const useIntroStage = (elements: IntroElements, onArrive: () => void) => 
             arrived = true;
             onArrive();
         }
+
+        const letterbox = elements.letterbox.value;
+        if (letterbox) letterbox.style.setProperty("--intro-letterbox", letterboxAt(timeline.frames).toFixed(4));
 
         const hint = elements.hint.value;
         if (hint) hint.style.opacity = `${hintOpacityAt(zoom)}`;
